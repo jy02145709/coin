@@ -5,7 +5,7 @@ import {
   useLocation,
   Link,
   useMatch,
-  useNavigate,
+  useNavigate, // useNavigate 추가
 } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
@@ -73,10 +73,6 @@ const Tab = styled.span<{ isActive: boolean }>`
   a {
     display: block;
   }
-`;
-const HomeButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
 `;
 
 const HomeButton = styled.button`
@@ -155,7 +151,7 @@ function Coin() {
   const state = location.state as RouteState;
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate 사용
 
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ["info", coinId],
@@ -181,6 +177,8 @@ function Coin() {
           <Title>{state?.name || infoData?.name || "No Name"}</Title>
         )}
       </Header>
+      {/* 홈으로 돌아가는 버튼 */}
+      <HomeButton onClick={() => navigate("/")}>Home</HomeButton>
       {loading ? <Loader>Loading...</Loader> : null}
       {!loading && infoData && tickersData && (
         <>
@@ -220,9 +218,6 @@ function Coin() {
           <Outlet context={{ coinId }} />
         </>
       )}
-      <HomeButtonWrapper>
-        <HomeButton onClick={() => navigate("/")}>Home</HomeButton>
-      </HomeButtonWrapper>
     </Container>
   );
 }
